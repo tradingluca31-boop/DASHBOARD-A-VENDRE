@@ -1,18 +1,17 @@
 """
-🏠 HOME PAGE - Trading Dashboard Pro V2
-Ultra-modern layout with 30+ institutional metrics
-Inspired by professional analytics dashboards
+🏠 PAGE D'ACCUEIL - Trading Dashboard Pro V2.5 ULTRA-MODERNE
+Design 2025 : Glassmorphism, Animations, Typographie Moderne
+100% Français | Inspired by Linear, Vercel, Stripe
 """
 
 from typing import Optional, List, Dict
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 from dash import dcc, html, Input, Output, State, callback
 import dash_bootstrap_components as dbc
 
 # ============================================
-# 🎨 COLOR PALETTE (Modern Vibrant)
+# 🎨 PALETTE MODERNE
 # ============================================
 
 COLORS = {
@@ -24,664 +23,596 @@ COLORS = {
     'yellow': '#ffc107',
     'pink': '#ff6b9d',
     'red': '#dc3545',
-    'dark_bg': '#0a0e27',
-    'card_bg': '#161b2e',
-    'text': '#ffffff',
 }
 
 # ============================================
-# 📐 PAGE LAYOUT
+# 📐 LAYOUT PRINCIPAL
 # ============================================
 
 
 def layout():
-    """
-    Modern home page layout with:
-    - File upload section
-    - 30+ metrics in colorful cards
-    - Multiple chart types (line, bar, donut)
-    - Professional grid layout
-    """
+    """Page d'accueil moderne avec glassmorphism"""
     return dbc.Container(
-        [
-            # Page Header
+        fluid=True,
+        className="px-4 py-5",
+        children=[
+            # ============================================
+            # 🎯 EN-TÊTE AVEC GRADIENT
+            # ============================================
             dbc.Row(
                 [
                     dbc.Col(
                         [
-                            html.H1(
+                            html.Div(
                                 [
-                                    html.I(className="fas fa-home me-3"),
-                                    "Aperçu du tableau de bord",
+                                    html.H1(
+                                        "📊 Tableau de Bord Trading Pro",
+                                        className="mb-3",
+                                        style={'textAlign': 'center'},
+                                    ),
+                                    html.P(
+                                        "Analyse institutionnelle • 30+ Métriques Hedge Fund • IA-Powered",
+                                        className="lead text-muted text-center mb-5",
+                                        style={'fontSize': '1.2rem', 'fontWeight': '500'},
+                                    ),
                                 ],
-                                className="mb-2",
-                                style={'fontSize': '2.5rem', 'fontWeight': '700'},
-                            ),
-                            html.P(
-                                "Téléchargez vos données de trading et suivez les performances en temps réel.",
-                                className="text-muted lead",
-                                style={'fontSize': '1.1rem'},
                             ),
                         ],
+                        width=12,
                     ),
                 ],
-                className="mb-4",
             ),
-            # File Upload Section
+            # ============================================
+            # 📤 UPLOAD SECTION GLASSMORPHISM
+            # ============================================
             dbc.Row(
                 [
                     dbc.Col(
-                        dbc.Card(
-                            [
-                                dbc.CardHeader(
-                                    html.H5(
-                                        [
-                                            html.I(className="fas fa-upload me-2"),
-                                            "Télécharger les données de trading",
-                                        ],
-                                        className="mb-0",
-                                    ),
-                                    style={'background': COLORS['card_bg'], 'borderBottom': '2px solid ' + COLORS['cyan']},
-                                ),
-                                dbc.CardBody(
-                                    [
-                                        dcc.Upload(
-                                            id="upload-data",
-                                            children=html.Div(
-                                                [
-                                                    html.I(
-                                                        className="fas fa-cloud-upload-alt fa-4x mb-3",
-                                                        style={'color': COLORS['cyan']},
-                                                    ),
-                                                    html.H4("Glissez-déposez ou cliquez pour télécharger", style={'fontWeight': '600'}),
-                                                    html.P(
-                                                        "Formats de fichiers compatibles : ZIP, JSON, CSV",
-                                                        className="text-muted mb-0",
-                                                        style={'fontSize': '0.95rem'},
-                                                    ),
-                                                ],
-                                                className="text-center py-5",
-                                            ),
-                                            style={
-                                                "borderWidth": "3px",
-                                                "borderStyle": "dashed",
-                                                "borderRadius": "15px",
-                                                "borderColor": COLORS['cyan'],
-                                                "background": COLORS['dark_bg'],
-                                                "cursor": "pointer",
-                                                "transition": "all 0.3s ease",
-                                            },
-                                            multiple=False,
+                        [
+                            dbc.Card(
+                                [
+                                    dbc.CardHeader(
+                                        html.Div(
+                                            [
+                                                html.I(className="fas fa-cloud-upload-alt fa-2x me-3", style={'color': COLORS['cyan']}),
+                                                html.Span("Télécharger vos Données", style={'fontSize': '1.4rem', 'fontWeight': '800'}),
+                                            ],
+                                            className="d-flex align-items-center justify-content-center py-2",
                                         ),
-                                        html.Div(id="upload-status", className="mt-3"),
-                                    ],
-                                    style={'background': COLORS['card_bg']},
-                                ),
-                            ],
-                            className="shadow-lg mb-4",
-                            style={'border': 'none', 'background': COLORS['card_bg']},
-                        ),
+                                    ),
+                                    dbc.CardBody(
+                                        [
+                                            dcc.Upload(
+                                                id="upload-data",
+                                                children=html.Div(
+                                                    [
+                                                        html.I(
+                                                            className="fas fa-cloud-upload-alt mb-4",
+                                                            style={'fontSize': '5rem', 'color': COLORS['cyan'], 'opacity': '0.9'},
+                                                        ),
+                                                        html.H3(
+                                                            "Glissez-déposez vos fichiers ici",
+                                                            className="mb-3",
+                                                            style={'fontWeight': '700', 'fontSize': '1.8rem'},
+                                                        ),
+                                                        html.P(
+                                                            "ou cliquez pour sélectionner",
+                                                            className="text-muted mb-4",
+                                                            style={'fontSize': '1.15rem'},
+                                                        ),
+                                                        html.Div(
+                                                            [
+                                                                dbc.Badge("ZIP", pill=True, color="info", className="me-3 px-4 py-2", style={'fontSize': '1.1rem'}),
+                                                                dbc.Badge("JSON", pill=True, color="success", className="me-3 px-4 py-2", style={'fontSize': '1.1rem'}),
+                                                                dbc.Badge("CSV", pill=True, color="warning", className="me-3 px-4 py-2", style={'fontSize': '1.1rem'}),
+                                                                dbc.Badge("XLSX", pill=True, color="danger", className="px-4 py-2", style={'fontSize': '1.1rem'}),
+                                                            ],
+                                                            className="d-flex justify-content-center flex-wrap mt-4",
+                                                        ),
+                                                    ],
+                                                    className="text-center py-4",
+                                                ),
+                                                multiple=False,
+                                            ),
+                                        ],
+                                        className="p-5",
+                                    ),
+                                ],
+                                className="mb-5 premium-border",
+                            ),
+                        ],
                         lg=10,
+                        xl=8,
                         className="mx-auto",
                     ),
                 ],
             ),
-            # Metrics & Charts Containers
-            html.Div(id="metrics-cards-container"),
-            html.Div(id="home-charts-container"),
+            # ============================================
+            # 🎯 CONTENU DYNAMIQUE
+            # ============================================
+            html.Div(id="dashboard-content", className="mt-5"),
+            # Storage
+            dcc.Store(id="stored-data"),
         ],
-        fluid=True,
-        style={'maxWidth': '1800px'},
     )
 
 
 # ============================================
-# 💎 HERO METRICS CARDS (Top 3 Large)
+# 💎 HERO CARD (Top 3 métriques)
 # ============================================
 
 
-def create_hero_card(icon, label, value, subtitle, color, glow=True):
-    """Create large hero metric card with glow effect"""
-    return dbc.Card(
+def create_hero_metric(icon, label, value, subtitle, color, glow_class):
+    """Carte hero avec glassmorphism et glow"""
+    return dbc.Col(
         [
-            dbc.CardBody(
+            html.Div(
                 [
-                    html.Div(
-                        [
-                            html.I(
-                                className=f"fas {icon} fa-2x mb-3",
-                                style={'color': color, 'opacity': '0.9'},
-                            ),
-                        ],
+                    html.I(className=f"{icon} fa-3x mb-4", style={'color': color, 'opacity': '0.9'}),
+                    html.H2(
+                        value,
+                        className=f"mb-3 text-gradient-{glow_class}",
+                        style={'fontSize': '3.8rem', 'fontWeight': '900'},
                     ),
-                    html.H6(
+                    html.P(
                         label,
                         className="text-muted mb-2",
-                        style={'fontSize': '0.85rem', 'textTransform': 'uppercase', 'letterSpacing': '1px'},
-                    ),
-                    html.H1(
-                        value,
-                        className="mb-2",
-                        style={
-                            'fontSize': '3.5rem',
-                            'fontWeight': '700',
-                            'color': color,
-                            'textShadow': f'0 0 20px {color}' if glow else 'none',
-                        },
+                        style={'fontSize': '0.95rem', 'fontWeight': '700', 'textTransform': 'uppercase', 'letterSpacing': '0.15em'},
                     ),
                     html.P(
                         subtitle,
                         className="mb-0",
-                        style={'fontSize': '0.9rem', 'color': '#adb5bd'},
+                        style={'fontSize': '1.05rem', 'opacity': '0.75', 'fontWeight': '500'},
                     ),
                 ],
-                style={'padding': '2rem'},
+                className=f"hero-card hero-card-{glow_class} text-center",
             ),
         ],
-        className="shadow-lg h-100",
-        style={
-            'background': f'linear-gradient(135deg, {COLORS["card_bg"]} 0%, {color}15 100%)',
-            'border': f'2px solid {color}30',
-            'borderRadius': '15px',
-            'transition': 'all 0.3s ease',
-        },
+        lg=4,
+        md=6,
+        className="mb-4",
     )
 
 
 # ============================================
-# 📊 STANDARD METRIC CARD
+# 📊 CARTE MÉTRIQUE STANDARD
 # ============================================
 
 
-def create_metric_card(icon, label, value, subtitle, color):
-    """Create standard size metric card"""
-    return dbc.Card(
+def create_metric_card(label, value, icon, color, description=""):
+    """Carte métrique glassmorphism avec hover"""
+    return dbc.Col(
         [
-            dbc.CardBody(
+            html.Div(
                 [
-                    html.Div(
-                        [
-                            html.I(
-                                className=f"fas {icon}",
-                                style={'fontSize': '1.8rem', 'color': color},
-                            ),
-                        ],
-                        className="mb-2",
-                    ),
-                    html.H6(
-                        label,
-                        className="text-muted mb-2",
-                        style={'fontSize': '0.75rem', 'textTransform': 'uppercase'},
-                    ),
-                    html.H3(
+                    html.I(className=icon, style={'color': color, 'fontSize': '2rem', 'opacity': '0.85', 'marginBottom': '1rem'}),
+                    html.H4(
                         value,
-                        className="mb-1",
-                        style={'fontSize': '2rem', 'fontWeight': '700', 'color': color},
+                        className="mb-2",
+                        style={'fontSize': '2.2rem', 'fontWeight': '800', 'color': color},
                     ),
                     html.P(
-                        subtitle,
-                        className="mb-0 small",
-                        style={'fontSize': '0.8rem', 'color': '#6c757d'},
+                        label,
+                        className="text-muted mb-1",
+                        style={'fontSize': '0.95rem', 'fontWeight': '600'},
                     ),
+                    html.P(
+                        description,
+                        className="mb-0",
+                        style={'fontSize': '0.8rem', 'opacity': '0.6'},
+                    ) if description else None,
                 ],
-                style={'padding': '1.5rem 1.2rem'},
+                className="metric-card text-center",
+                style={'--accent-color': color},
             ),
         ],
-        className="shadow h-100",
-        style={
-            'background': COLORS['card_bg'],
-            'border': 'none',
-            'borderLeft': f'4px solid {color}',
-            'borderRadius': '10px',
-        },
+        lg=3,
+        md=6,
+        sm=12,
+        className="mb-4",
     )
 
 
 # ============================================
-# 🎯 COMPLETE METRICS LAYOUT (30+ metrics)
+# 📈 GRAPHIQUE EQUITY MODERNE
 # ============================================
 
 
-def create_complete_metrics_layout(metrics: Dict) -> html.Div:
-    """
-    Create comprehensive metrics dashboard with 30+ metrics
-
-    Args:
-        metrics: Dictionary with all calculated metrics
-
-    Returns:
-        Complete metrics layout with cards and charts
-    """
-
-    # Row 1: Hero Metrics (3 large cards)
-    hero_row = dbc.Row(
-        [
-            dbc.Col(
-                create_hero_card(
-                    icon="fa-chart-line",
-                    label="ROI Total",
-                    value=f"+{metrics.get('roi_percent', 0):.1f}%",
-                    subtitle=f"Profit: ${metrics.get('total_pnl', 0):,.2f}",
-                    color=COLORS['cyan'],
-                ),
-                lg=4, md=12, className="mb-4",
-            ),
-            dbc.Col(
-                create_hero_card(
-                    icon="fa-trophy",
-                    label="Sharpe Ratio",
-                    value=f"{metrics.get('sharpe_ratio', 0):.2f}",
-                    subtitle="Rendement ajusté au risque",
-                    color=COLORS['orange'],
-                ),
-                lg=4, md=12, className="mb-4",
-            ),
-            dbc.Col(
-                create_hero_card(
-                    icon="fa-shield-alt",
-                    label="Max Drawdown",
-                    value=f"{metrics.get('max_drawdown_pct', 0):.1f}%",
-                    subtitle="FTMO Limit: -10%",
-                    color=COLORS['violet'],
-                ),
-                lg=4, md=12, className="mb-4",
-            ),
-        ],
-        className="mb-4",
-    )
-
-    # Row 2: Performance Metrics (4 cards)
-    performance_row = dbc.Row(
-        [
-            dbc.Col(
-                create_metric_card(
-                    "fa-dollar-sign", "Balance Finale",
-                    f"${metrics.get('final_balance', 0):,.0f}",
-                    f"Initial: ${metrics.get('initial_balance', 10000):,.0f}",
-                    COLORS['green'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-percent", "Win Rate",
-                    f"{metrics.get('win_rate', 0):.1f}%",
-                    f"{metrics.get('winning_trades', 0)} / {metrics.get('total_trades', 0)} trades",
-                    COLORS['blue'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-balance-scale", "Profit Factor",
-                    f"{metrics.get('profit_factor', 0):.2f}",
-                    "Target: > 1.5",
-                    COLORS['yellow'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-star", "Expectancy",
-                    f"${metrics.get('expectancy', 0):.2f}",
-                    "Par trade moyen",
-                    COLORS['pink'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-        ],
-        className="mb-4",
-    )
-
-    # Row 3: Risk Metrics (4 cards)
-    risk_row = dbc.Row(
-        [
-            dbc.Col(
-                create_metric_card(
-                    "fa-chart-area", "Sortino Ratio",
-                    f"{metrics.get('sortino_ratio', 0):.2f}",
-                    "Downside risk ajusté",
-                    COLORS['cyan'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-wave-square", "Calmar Ratio",
-                    f"{metrics.get('calmar_ratio', 0):.2f}",
-                    "ROI / Max DD",
-                    COLORS['orange'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-exclamation-triangle", "VaR 95%",
-                    f"{metrics.get('var_95', 0):.2f}%",
-                    "Perte max probable",
-                    COLORS['red'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-skull-crossbones", "CVaR (Expected Shortfall)",
-                    f"{metrics.get('cvar_95', 0):.2f}%",
-                    "Perte extrême moyenne",
-                    COLORS['violet'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-        ],
-        className="mb-4",
-    )
-
-    # Row 4: Trade Analysis (4 cards)
-    trade_row = dbc.Row(
-        [
-            dbc.Col(
-                create_metric_card(
-                    "fa-coins", "Gain Moyen",
-                    f"${metrics.get('avg_win', 0):.2f}",
-                    f"Meilleur: ${metrics.get('best_trade', 0):.2f}",
-                    COLORS['green'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-money-bill-wave", "Perte Moyenne",
-                    f"${abs(metrics.get('avg_loss', 0)):.2f}",
-                    f"Pire: ${abs(metrics.get('worst_trade', 0)):.2f}",
-                    COLORS['red'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-exchange-alt", "Win/Loss Ratio",
-                    f"{metrics.get('win_loss_ratio', 0):.2f}",
-                    "Ratio gains/pertes",
-                    COLORS['blue'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-clock", "Durée Moyenne",
-                    f"{metrics.get('avg_trade_duration_hours', 0):.1f}h",
-                    "Par position",
-                    COLORS['yellow'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-        ],
-        className="mb-4",
-    )
-
-    # Row 5: FTMO Compliance (4 cards)
-    ftmo_row = dbc.Row(
-        [
-            dbc.Col(
-                create_metric_card(
-                    "fa-check-circle" if metrics.get('ftmo_max_dd_compliant') else "fa-times-circle",
-                    "FTMO Max DD",
-                    "✓ Conforme" if metrics.get('ftmo_max_dd_compliant') else "✗ Non conforme",
-                    f"Max: {metrics.get('max_drawdown_pct', 0):.1f}% / 10%",
-                    COLORS['green'] if metrics.get('ftmo_max_dd_compliant') else COLORS['red'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-check-circle" if metrics.get('ftmo_daily_loss_compliant') else "fa-times-circle",
-                    "FTMO Daily Loss",
-                    "✓ Conforme" if metrics.get('ftmo_daily_loss_compliant') else "✗ Non conforme",
-                    f"Max: {metrics.get('max_daily_loss_pct', 0):.1f}% / 5%",
-                    COLORS['green'] if metrics.get('ftmo_daily_loss_compliant') else COLORS['red'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-bullseye",
-                    "Profit Target",
-                    f"{metrics.get('roi_percent', 0):.1f}% / 10%",
-                    "Phase 1 FTMO",
-                    COLORS['green'] if metrics.get('roi_percent', 0) >= 10 else COLORS['yellow'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-calendar-check",
-                    "Trading Days",
-                    f"{metrics.get('trading_days', 0)}",
-                    "Min: 4 jours",
-                    COLORS['green'] if metrics.get('trading_days', 0) >= 4 else COLORS['yellow'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-        ],
-        className="mb-4",
-    )
-
-    # Row 6: Advanced Metrics (4 cards)
-    advanced_row = dbc.Row(
-        [
-            dbc.Col(
-                create_metric_card(
-                    "fa-heartbeat", "Recovery Factor",
-                    f"{metrics.get('recovery_factor', 0):.2f}",
-                    "Net Profit / Max DD",
-                    COLORS['cyan'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-wave-square", "Ulcer Index",
-                    f"{metrics.get('ulcer_index', 0):.2f}",
-                    "Stress du DD",
-                    COLORS['orange'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-frown", "Pain Index",
-                    f"{metrics.get('pain_index', 0):.2f}",
-                    "Souffrance moyenne",
-                    COLORS['violet'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-            dbc.Col(
-                create_metric_card(
-                    "fa-percentage", "Kelly Criterion",
-                    f"{metrics.get('kelly_criterion', 0):.1f}%",
-                    "Taille position optimale",
-                    COLORS['pink'],
-                ),
-                lg=3, md=6, className="mb-3",
-            ),
-        ],
-        className="mb-4",
-    )
-
-    return html.Div([hero_row, performance_row, risk_row, trade_row, ftmo_row, advanced_row])
-
-
-# ============================================
-# 📈 CHARTS SECTION
-# ============================================
-
-
-def create_equity_chart(data: List[Dict]) -> dcc.Graph:
-    """Create modern equity curve with area fill"""
-    df = pd.DataFrame(data)
-
+def create_modern_equity_chart(df: pd.DataFrame) -> go.Figure:
+    """Equity curve avec gradient et glassmorphism"""
     fig = go.Figure()
 
-    # Equity curve with gradient fill
+    balance_col = 'balance' if 'balance' in df.columns else 'total_reward'
+
     fig.add_trace(
         go.Scatter(
             x=df.index,
-            y=df.get('balance', df.get('total_reward', [])),
+            y=df[balance_col],
             mode='lines',
-            name='Equity',
-            line=dict(color=COLORS['cyan'], width=3),
+            name='Balance',
+            line=dict(color=COLORS['cyan'], width=4),
             fill='tozeroy',
-            fillcolor=f'rgba(0, 217, 255, 0.1)',
-            hovertemplate='<b>Equity</b>: $%{y:,.2f}<extra></extra>',
+            fillcolor='rgba(0, 217, 255, 0.15)',
+            hovertemplate='<b>Step</b>: %{x}<br><b>Balance</b>: $%{y:,.2f}<extra></extra>',
         )
     )
 
     fig.update_layout(
         title={
-            'text': '📈 Courbe d\'Équité',
-            'font': {'size': 24, 'weight': 700, 'color': COLORS['text']},
+            'text': '<b>📈 Évolution de la Balance</b>',
+            'font': {'size': 28, 'family': 'Inter', 'color': '#fff'},
+            'x': 0.5,
+            'xanchor': 'center',
         },
-        template='plotly_dark',
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(22, 27, 46, 0.4)',
+        font=dict(family="Inter", color='#fff', size=14),
         hovermode='x unified',
-        height=450,
-        paper_bgcolor=COLORS['card_bg'],
-        plot_bgcolor=COLORS['dark_bg'],
-        margin=dict(l=20, r=20, t=60, b=20),
+        hoverlabel=dict(
+            bgcolor="rgba(22, 27, 46, 0.95)",
+            font_size=15,
+            font_family="Inter",
+            bordercolor=COLORS['cyan'],
+        ),
         xaxis=dict(
-            title='Episode',
-            gridcolor='#2a2e45',
+            title='<b>Checkpoints</b>',
+            gridcolor='rgba(255, 255, 255, 0.06)',
             showgrid=True,
+            zeroline=False,
         ),
         yaxis=dict(
-            title='Balance ($)',
-            gridcolor='#2a2e45',
+            title='<b>Balance ($)</b>',
+            gridcolor='rgba(255, 255, 255, 0.06)',
             showgrid=True,
+            zeroline=False,
         ),
+        margin=dict(l=60, r=40, t=100, b=60),
+        height=500,
     )
 
-    return dcc.Graph(
-        figure=fig,
-        config={'displayModeBar': True, 'displaylogo': False},
-        style={'borderRadius': '15px', 'overflow': 'hidden'},
-    )
+    return fig
 
 
-def create_monthly_returns_chart(data: List[Dict]) -> dcc.Graph:
-    """Create monthly returns bar chart"""
-    # Simplified for demo - would need actual monthly aggregation
-    months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc']
-    returns = [2.5, 3.1, -1.2, 4.5, 2.8, 5.2, 3.7, -0.8, 6.1, 4.3, 3.9, 5.5]
-    colors_list = [COLORS['green'] if r > 0 else COLORS['red'] for r in returns]
+# ============================================
+# 🍩 DONUT WIN/LOSS
+# ============================================
+
+
+def create_winloss_donut(metrics: Dict) -> go.Figure:
+    """Donut chart moderne"""
+    winning = metrics.get("winning_trades", 0)
+    losing = metrics.get("losing_trades", 0)
 
     fig = go.Figure(
-        go.Bar(
-            x=months,
-            y=returns,
-            marker=dict(color=colors_list, line=dict(width=0)),
-            hovertemplate='<b>%{x}</b><br>Return: %{y:.1f}%<extra></extra>',
-        )
+        data=[
+            go.Pie(
+                labels=['Trades Gagnants', 'Trades Perdants'],
+                values=[winning, losing],
+                hole=0.65,
+                marker=dict(
+                    colors=[COLORS['green'], COLORS['red']],
+                    line=dict(color='rgba(255,255,255,0.1)', width=3),
+                ),
+                textfont=dict(size=16, family='Inter', color='#fff'),
+                hovertemplate='<b>%{label}</b><br>%{value} trades<br>%{percent}<extra></extra>',
+            )
+        ]
     )
 
-    fig.update_layout(
-        title={
-            'text': '📊 Rendements Mensuels',
-            'font': {'size': 20, 'weight': 700},
-        },
-        template='plotly_dark',
-        height=350,
-        paper_bgcolor=COLORS['card_bg'],
-        plot_bgcolor=COLORS['dark_bg'],
-        margin=dict(l=20, r=20, t=60, b=20),
-        yaxis=dict(title='Return (%)', gridcolor='#2a2e45'),
-        xaxis=dict(gridcolor='#2a2e45'),
-    )
+    total_trades = winning + losing
+    win_rate = (winning / total_trades * 100) if total_trades > 0 else 0
 
-    return dcc.Graph(figure=fig, config={'displayModeBar': False, 'displaylogo': False})
-
-
-def create_win_loss_donut(metrics: Dict) -> dcc.Graph:
-    """Create win/loss ratio donut chart"""
-    winning = metrics.get('winning_trades', 0)
-    losing = metrics.get('losing_trades', 0)
-
-    fig = go.Figure(
-        go.Pie(
-            labels=['Gagnants', 'Perdants'],
-            values=[winning, losing],
-            hole=0.6,
-            marker=dict(colors=[COLORS['green'], COLORS['red']]),
-            textinfo='percent+label',
-            textfont=dict(size=14, color='white'),
-            hovertemplate='<b>%{label}</b><br>Trades: %{value}<br>%{percent}<extra></extra>',
-        )
-    )
-
-    # Add center text
     fig.add_annotation(
-        text=f"{metrics.get('win_rate', 0):.1f}%",
-        x=0.5, y=0.5,
-        font=dict(size=32, color=COLORS['text'], weight=700),
+        text=f"<b style='font-size:36px'>{win_rate:.1f}%</b><br><span style='font-size:16px;opacity:0.7'>Win Rate</span>",
+        x=0.5,
+        y=0.5,
+        font=dict(size=18, family='Inter', color='#fff'),
         showarrow=False,
     )
 
     fig.update_layout(
         title={
-            'text': '🎯 Win/Loss Ratio',
-            'font': {'size': 20, 'weight': 700},
+            'text': '<b>🎯 Répartition des Trades</b>',
+            'font': {'size': 26, 'family': 'Inter', 'color': '#fff'},
+            'x': 0.5,
+            'xanchor': 'center',
         },
-        template='plotly_dark',
-        height=350,
-        paper_bgcolor=COLORS['card_bg'],
-        plot_bgcolor=COLORS['dark_bg'],
-        margin=dict(l=20, r=20, t=60, b=20),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(family="Inter", color='#fff'),
+        margin=dict(l=40, r=40, t=90, b=60),
+        height=450,
         showlegend=True,
         legend=dict(
-            orientation='h',
-            yanchor='bottom',
+            orientation="h",
+            yanchor="top",
             y=-0.1,
-            xanchor='center',
+            xanchor="center",
             x=0.5,
+            font=dict(size=14),
         ),
     )
 
-    return dcc.Graph(figure=fig, config={'displayModeBar': False, 'displaylogo': False})
+    return fig
 
 
-def create_charts_section(data: List[Dict], metrics: Dict) -> dbc.Row:
-    """Create complete charts section"""
-    return html.Div([
-        # Equity Curve (Full Width)
-        dbc.Row([
-            dbc.Col(
-                dbc.Card(
-                    dbc.CardBody(create_equity_chart(data)),
-                    className="shadow-lg",
-                    style={'background': COLORS['card_bg'], 'border': 'none', 'borderRadius': '15px'},
-                ),
-                lg=12, className="mb-4",
+# ============================================
+# 🎯 DASHBOARD COMPLET
+# ============================================
+
+
+def create_dashboard_content(metrics: Dict, df: pd.DataFrame):
+    """Contenu complet du dashboard moderne"""
+
+    return html.Div(
+        [
+            # ============================================
+            # 🌟 HERO METRICS (Top 3)
+            # ============================================
+            dbc.Row(
+                [
+                    create_hero_metric(
+                        icon="fas fa-chart-line",
+                        label="Rendement Total",
+                        value=f"{metrics.get('roi_percent', 0):+.2f}%",
+                        subtitle=f"P&L: ${metrics.get('total_pnl', 0):,.2f}",
+                        color=COLORS['cyan'],
+                        glow_class="cyan",
+                    ),
+                    create_hero_metric(
+                        icon="fas fa-trophy",
+                        label="Sharpe Ratio",
+                        value=f"{metrics.get('sharpe_ratio', 0):.2f}",
+                        subtitle="Performance / Risque",
+                        color=COLORS['orange'],
+                        glow_class="orange",
+                    ),
+                    create_hero_metric(
+                        icon="fas fa-shield-alt",
+                        label="Max Drawdown",
+                        value=f"{abs(metrics.get('max_drawdown_pct', 0)):.2f}%",
+                        subtitle="Perte Maximale",
+                        color=COLORS['violet'],
+                        glow_class="violet",
+                    ),
+                ],
+                className="mb-5",
             ),
-        ]),
-        # Monthly Returns + Win/Loss Donut (Side by side)
-        dbc.Row([
-            dbc.Col(
-                dbc.Card(
-                    dbc.CardBody(create_monthly_returns_chart(data)),
-                    className="shadow-lg",
-                    style={'background': COLORS['card_bg'], 'border': 'none', 'borderRadius': '15px'},
-                ),
-                lg=6, md=12, className="mb-4",
+            # ============================================
+            # 📊 GRAPHIQUES PRINCIPAUX
+            # ============================================
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.Card(
+                                dbc.CardBody(
+                                    dcc.Graph(figure=create_modern_equity_chart(df), config={'displayModeBar': False}),
+                                    className="p-4",
+                                ),
+                                className="glass-effect",
+                            ),
+                        ],
+                        lg=8,
+                        className="mb-4",
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Card(
+                                dbc.CardBody(
+                                    dcc.Graph(figure=create_winloss_donut(metrics), config={'displayModeBar': False}),
+                                    className="p-4",
+                                ),
+                                className="glass-effect",
+                            ),
+                        ],
+                        lg=4,
+                        className="mb-4",
+                    ),
+                ],
             ),
-            dbc.Col(
-                dbc.Card(
-                    dbc.CardBody(create_win_loss_donut(metrics)),
-                    className="shadow-lg",
-                    style={'background': COLORS['card_bg'], 'border': 'none', 'borderRadius': '15px'},
-                ),
-                lg=6, md=12, className="mb-4",
+            # ============================================
+            # 💼 PERFORMANCE
+            # ============================================
+            html.Div(
+                [
+                    html.H3(
+                        [html.I(className="fas fa-chart-bar me-3"), "Performance"],
+                        className="mb-4 text-gradient-cyan",
+                        style={'fontSize': '2.2rem', 'fontWeight': '900'},
+                    ),
+                    dbc.Row(
+                        [
+                            create_metric_card("Profit Factor", f"{metrics.get('profit_factor', 0):.2f}", "fas fa-balance-scale", COLORS['cyan'], "Gains / Pertes"),
+                            create_metric_card("Espérance", f"${metrics.get('expectancy', 0):.2f}", "fas fa-dollar-sign", COLORS['green'], "Profit par trade"),
+                            create_metric_card("CAGR", f"{metrics.get('cagr', 0):.2f}%", "fas fa-percent", COLORS['blue'], "Croissance annuelle"),
+                            create_metric_card("Balance Finale", f"${metrics.get('final_balance', 0):,.0f}", "fas fa-wallet", COLORS['orange'], "Solde actuel"),
+                        ],
+                    ),
+                ],
+                className="mb-5",
             ),
-        ]),
-    ])
+            # ============================================
+            # 🛡️ GESTION DU RISQUE
+            # ============================================
+            html.Div(
+                [
+                    html.H3(
+                        [html.I(className="fas fa-shield-alt me-3"), "Gestion du Risque"],
+                        className="mb-4 text-gradient-orange",
+                        style={'fontSize': '2.2rem', 'fontWeight': '900'},
+                    ),
+                    dbc.Row(
+                        [
+                            create_metric_card("Sortino Ratio", f"{metrics.get('sortino_ratio', 0):.2f}", "fas fa-chart-area", COLORS['violet'], "Risque baissier"),
+                            create_metric_card("Calmar Ratio", f"{metrics.get('calmar_ratio', 0):.2f}", "fas fa-signal", COLORS['pink'], "CAGR / Max DD"),
+                            create_metric_card("VaR 95%", f"{metrics.get('var_95', 0):.2f}%", "fas fa-exclamation-triangle", COLORS['yellow'], "Value at Risk"),
+                            create_metric_card("CVaR 95%", f"{metrics.get('cvar_95', 0):.2f}%", "fas fa-shield-virus", COLORS['red'], "Risque de queue"),
+                        ],
+                    ),
+                ],
+                className="mb-5",
+            ),
+            # ============================================
+            # 📈 STATISTIQUES TRADING
+            # ============================================
+            html.Div(
+                [
+                    html.H3(
+                        [html.I(className="fas fa-exchange-alt me-3"), "Statistiques de Trading"],
+                        className="mb-4 text-gradient-violet",
+                        style={'fontSize': '2.2rem', 'fontWeight': '900'},
+                    ),
+                    dbc.Row(
+                        [
+                            create_metric_card("Total Trades", f"{metrics.get('total_trades', 0)}", "fas fa-list-ol", COLORS['cyan'], "Positions totales"),
+                            create_metric_card("Win Rate", f"{metrics.get('win_rate', 0):.1f}%", "fas fa-percentage", COLORS['green'], "Taux de réussite"),
+                            create_metric_card("Gain Moyen", f"${metrics.get('avg_win', 0):,.2f}", "fas fa-arrow-up", COLORS['green'], "Par trade gagnant"),
+                            create_metric_card("Perte Moyenne", f"${abs(metrics.get('avg_loss', 0)):,.2f}", "fas fa-arrow-down", COLORS['red'], "Par trade perdant"),
+                            create_metric_card("Meilleur Trade", f"${metrics.get('best_trade', 0):,.2f}", "fas fa-star", COLORS['yellow'], "Plus gros gain"),
+                            create_metric_card("Pire Trade", f"${abs(metrics.get('worst_trade', 0)):,.2f}", "fas fa-skull", COLORS['red'], "Plus grosse perte"),
+                            create_metric_card("Ratio W/L", f"{metrics.get('win_loss_ratio', 0):.2f}", "fas fa-divide", COLORS['blue'], "Gain / Perte"),
+                            create_metric_card("Durée Moy", f"{metrics.get('avg_trade_duration_hours', 0):.1f}h", "fas fa-clock", COLORS['violet'], "Par position"),
+                        ],
+                    ),
+                ],
+                className="mb-5",
+            ),
+            # ============================================
+            # 💎 MÉTRIQUES AVANCÉES
+            # ============================================
+            html.Div(
+                [
+                    html.H3(
+                        [html.I(className="fas fa-gem me-3"), "Métriques Avancées"],
+                        className="mb-4",
+                        style={
+                            'fontSize': '2.2rem',
+                            'fontWeight': '900',
+                            'background': 'linear-gradient(135deg, #00d9ff, #ff6b35, #7b68ee)',
+                            '-webkit-background-clip': 'text',
+                            '-webkit-text-fill-color': 'transparent',
+                            'backgroundClip': 'text',
+                        },
+                    ),
+                    dbc.Row(
+                        [
+                            create_metric_card("Recovery Factor", f"{metrics.get('recovery_factor', 0):.2f}", "fas fa-heartbeat", COLORS['green'], "Profit / Max DD"),
+                            create_metric_card("Ulcer Index", f"{metrics.get('ulcer_index', 0):.2f}", "fas fa-wave-square", COLORS['orange'], "Volatilité DD"),
+                            create_metric_card("Pain Index", f"{metrics.get('pain_index', 0):.2f}", "fas fa-thermometer-half", COLORS['pink'], "Intensité DD"),
+                            create_metric_card("Kelly Criterion", f"{metrics.get('kelly_criterion', 0):.1f}%", "fas fa-bullseye", COLORS['cyan'], "Position optimale"),
+                        ],
+                    ),
+                ],
+                className="mb-5",
+            ),
+            # ============================================
+            # ✅ FTMO COMPLIANCE
+            # ============================================
+            html.Div(
+                [
+                    html.H3(
+                        [html.I(className="fas fa-check-circle me-3"), "Conformité FTMO"],
+                        className="mb-4",
+                        style={
+                            'fontSize': '2.2rem',
+                            'fontWeight': '900',
+                            'background': 'linear-gradient(135deg, #28a745, #20c997)',
+                            '-webkit-background-clip': 'text',
+                            '-webkit-text-fill-color': 'transparent',
+                            'backgroundClip': 'text',
+                        },
+                    ),
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                [
+                                    dbc.Alert(
+                                        [
+                                            html.I(className="fas fa-check-circle fa-3x mb-3" if metrics.get('ftmo_max_dd_compliant', False) else "fas fa-times-circle fa-3x mb-3"),
+                                            html.H4("Max Drawdown < 10%", className="mb-3 fw-bold"),
+                                            html.H5(f"{abs(metrics.get('max_drawdown_pct', 0)):.2f}%", className="mb-2", style={'fontSize': '2.5rem', 'fontWeight': '900'}),
+                                            html.P("Limite FTMO", className="mb-0", style={'opacity': '0.8'}),
+                                        ],
+                                        color="success" if metrics.get('ftmo_max_dd_compliant', False) else "danger",
+                                        className="text-center glass-effect py-4",
+                                    ),
+                                ],
+                                lg=4,
+                                md=6,
+                                className="mb-4",
+                            ),
+                            dbc.Col(
+                                [
+                                    dbc.Alert(
+                                        [
+                                            html.I(className="fas fa-calendar-day fa-3x mb-3" if metrics.get('ftmo_daily_loss_compliant', False) else "fas fa-exclamation-circle fa-3x mb-3"),
+                                            html.H4("Perte Journalière < 5%", className="mb-3 fw-bold"),
+                                            html.H5(f"{abs(metrics.get('max_daily_loss_pct', 0)):.2f}%", className="mb-2", style={'fontSize': '2.5rem', 'fontWeight': '900'}),
+                                            html.P("Limite FTMO", className="mb-0", style={'opacity': '0.8'}),
+                                        ],
+                                        color="success" if metrics.get('ftmo_daily_loss_compliant', False) else "danger",
+                                        className="text-center glass-effect py-4",
+                                    ),
+                                ],
+                                lg=4,
+                                md=6,
+                                className="mb-4",
+                            ),
+                            dbc.Col(
+                                [
+                                    dbc.Alert(
+                                        [
+                                            html.I(className="fas fa-calendar-check fa-3x mb-3"),
+                                            html.H4("Jours de Trading", className="mb-3 fw-bold"),
+                                            html.H5(f"{metrics.get('trading_days', 0)}", className="mb-2", style={'fontSize': '2.5rem', 'fontWeight': '900'}),
+                                            html.P("Min: 4 jours", className="mb-0", style={'opacity': '0.8'}),
+                                        ],
+                                        color="info",
+                                        className="text-center glass-effect py-4",
+                                    ),
+                                ],
+                                lg=4,
+                                md=12,
+                                className="mb-4",
+                            ),
+                        ],
+                    ),
+                ],
+                className="mb-5",
+            ),
+            # ============================================
+            # 📥 EXPORT
+            # ============================================
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.Button(
+                                [html.I(className="fas fa-download me-3"), "Télécharger les Données (CSV)"],
+                                id="download-csv-btn",
+                                size="lg",
+                                className="w-100 premium-border",
+                                style={
+                                    'background': f'linear-gradient(135deg, {COLORS["cyan"]}, {COLORS["violet"]})',
+                                    'border': 'none',
+                                    'fontSize': '1.2rem',
+                                    'fontWeight': '800',
+                                    'padding': '1.2rem',
+                                    'borderRadius': '16px',
+                                },
+                            ),
+                            dcc.Download(id="download-csv"),
+                        ],
+                        lg=6,
+                        xl=5,
+                        className="mx-auto",
+                    ),
+                ],
+                className="text-center mt-4",
+            ),
+        ]
+    )
 
 
 # ============================================
@@ -690,82 +621,74 @@ def create_charts_section(data: List[Dict], metrics: Dict) -> dbc.Row:
 
 
 @callback(
-    [
-        Output("upload-status", "children"),
-        Output("metrics-cards-container", "children"),
-        Output("home-charts-container", "children"),
-    ],
+    [Output("dashboard-content", "children"), Output("stored-data", "data")],
     Input("upload-data", "contents"),
     State("upload-data", "filename"),
-    prevent_initial_call=True,
 )
-def handle_upload(contents: Optional[str], filename: Optional[str]):
-    """
-    Handle file upload and generate complete dashboard
-
-    Args:
-        contents: Base64 encoded file contents
-        filename: Name of uploaded file
-
-    Returns:
-        Status message, metrics cards, and charts
-    """
+def update_dashboard(contents, filename):
+    """Callback principal"""
     if contents is None:
-        return None, None, None
+        return html.Div(
+            [
+                dbc.Alert(
+                    [
+                        html.I(className="fas fa-info-circle fa-3x mb-4"),
+                        html.H3("Aucune donnée chargée", className="mb-3 fw-bold"),
+                        html.P(
+                            "Téléchargez un fichier pour commencer l'analyse de vos performances trading.",
+                            className="mb-0",
+                            style={'fontSize': '1.1rem'},
+                        ),
+                    ],
+                    color="info",
+                    className="text-center glass-effect mt-5 py-5",
+                ),
+            ],
+        ), None
+
+    from utils.data_loader import DataLoader
+    from utils.metrics import MetricsCalculator
 
     try:
-        # Import data loader
-        from utils.data_loader import DataLoader
-
         loader = DataLoader()
         data = loader.parse_upload(contents, filename)
 
         if data is None:
-            return (
-                dbc.Alert(
-                    [
-                        html.I(className="fas fa-times-circle me-2"),
-                        "Échec de l'analyse du fichier. Vérifiez le format.",
-                    ],
-                    color="danger",
-                ),
-                None,
-                None,
-            )
+            raise ValueError("Échec du parsing. Vérifiez le format du fichier.")
 
-        # Calculate ALL metrics
-        from utils.metrics import MetricsCalculator
+        df = pd.DataFrame(data)
+        calculator = MetricsCalculator(data)
+        metrics = calculator.get_all_metrics()
 
-        calc = MetricsCalculator(data)
-        metrics = calc.get_all_metrics()  # Get ALL 30+ metrics
+        content = create_dashboard_content(metrics, df)
 
-        # Success message
-        status = dbc.Alert(
-            [
-                html.I(className="fas fa-check-circle me-2"),
-                f"✓ Chargement réussi : {filename} - {len(data):,} points de données",
-            ],
-            color="success",
-            style={'borderRadius': '10px', 'fontSize': '1rem'},
-        )
-
-        # Create metrics layout
-        metrics_layout = create_complete_metrics_layout(metrics)
-
-        # Create charts
-        charts = create_charts_section(data, metrics)
-
-        return status, metrics_layout, charts
+        return content, data
 
     except Exception as e:
         return (
             dbc.Alert(
                 [
-                    html.I(className="fas fa-exclamation-triangle me-2"),
-                    f"Erreur : {str(e)}",
+                    html.I(className="fas fa-exclamation-triangle fa-3x mb-4"),
+                    html.H3("Erreur de Chargement", className="mb-3 fw-bold"),
+                    html.P(f"Détails : {str(e)}", className="mb-0", style={'fontSize': '1rem'}),
                 ],
                 color="danger",
+                className="text-center glass-effect mt-5 py-5",
             ),
             None,
-            None,
         )
+
+
+@callback(
+    Output("download-csv", "data"),
+    Input("download-csv-btn", "n_clicks"),
+    State("stored-data", "data"),
+    prevent_initial_call=True,
+)
+def download_csv(n_clicks, data):
+    """Export CSV"""
+    if data is None:
+        return None
+
+    df = pd.DataFrame(data)
+    return dcc.send_data_frame(df.to_csv, "trading_analytics.csv", index=False)
