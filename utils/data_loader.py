@@ -64,40 +64,86 @@ class DataLoader:
             return None
 
     def _parse_zip(self, data: bytes) -> Optional[List[Dict]]:
-        """Parse ZIP file and extract JSON data (training_stats.json or any .json file)."""
+        """
+        Parse ZIP file - ACCEPTS ALL ZIPS with trading data.
+
+        Tries in order:
+        1. training_stats.json (preferred)
+        2. Any .json file
+        3. Any .csv file
+        4. Any .xlsx file
+
+        Works with nested folders too!
+        """
         try:
             zip_bytes = io.BytesIO(data)
 
             with zipfile.ZipFile(zip_bytes, "r") as zip_ref:
-                # First, try to find training_stats.json (preferred)
-                stats_files = [
-                    f for f in zip_ref.namelist() if "training_stats.json" in f.lower()
-                ]
+                all_files = [f for f in zip_ref.namelist() if not f.endswith('/')]
 
-                # If not found, accept ANY .json file
-                if not stats_files:
-                    stats_files = [
-                        f for f in zip_ref.namelist() if f.lower().endswith(".json")
-                    ]
+                # Priority 1: training_stats.json (exact match)
+                target_file = None
+                for f in all_files:
+                    if "training_stats.json" in f.lower():
+                        target_file = f
+                        break
 
-                if not stats_files:
-                    raise ValueError("No JSON file found in ZIP. Please include a .json file with checkpoint data.")
+                # Priority 2: ANY .json file
+                if not target_file:
+                    json_files = [f for f in all_files if f.lower().endswith(".json")]
+                    if json_files:
+                        target_file = json_files[0]
+                        print(f"📄 Found JSON file: {target_file}")
 
-                # If multiple JSON files, use the first one
-                json_file_name = stats_files[0]
-                print(f"Loading JSON file from ZIP: {json_file_name}")
+                # Priority 3: ANY .csv file
+                if not target_file:
+                    csv_files = [f for f in all_files if f.lower().endswith(".csv")]
+                    if csv_files:
+                        target_file = csv_files[0]
+                        print(f"📊 Found CSV file: {target_file}")
+                        # Parse CSV and convert to list of dicts
+                        with zip_ref.open(target_file) as csv_file:
+                            df = pd.read_csv(csv_file)
+                            return df.to_dict('records')
 
-                # Extract and parse
-                with zip_ref.open(json_file_name) as json_file:
+                # Priority 4: ANY .xlsx file
+                if not target_file:
+                    excel_files = [f for f in all_files if f.lower().endswith((".xlsx", ".xls"))]
+                    if excel_files:
+                        target_file = excel_files[0]
+                        print(f"📈 Found Excel file: {target_file}")
+                        # Parse Excel and convert to list of dicts
+                        with zip_ref.open(target_file) as excel_file:
+                            df = pd.read_excel(excel_file)
+                            return df.to_dict('records')
+
+                if not target_file:
+                    raise ValueError(
+                        f"❌ No data file found in ZIP.\n"
+                        f"📦 ZIP contains: {', '.join(all_files[:5])}\n"
+                        f"✅ Supported: .json, .csv, .xlsx"
+                    )
+
+                # Parse JSON file
+                print(f"✅ Loading: {target_file}")
+                with zip_ref.open(target_file) as json_file:
                     data = json.load(json_file)
 
+                    # Handle both list and dict formats
+                    if isinstance(data, dict):
+                        # If dict, convert to list with single item
+                        if "checkpoints" in data:
+                            data = data["checkpoints"]
+                        else:
+                            data = [data]
+
                     if not isinstance(data, list):
-                        raise ValueError("JSON must be a list of checkpoints")
+                        raise ValueError("Data must be a list of checkpoints or dict with 'checkpoints' key")
 
                     return data
 
         except Exception as e:
-            print(f"Error parsing ZIP: {e}")
+            print(f"❌ Error parsing ZIP: {e}")
             return None
 
     def _parse_json(self, data: bytes) -> Optional[List[Dict]]:
