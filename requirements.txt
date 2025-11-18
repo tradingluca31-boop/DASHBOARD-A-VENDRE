@@ -1,0 +1,43 @@
+# ============================================
+# 🏛️ TRADING DASHBOARD PRO - Requirements
+# Professional-grade dependencies
+# ============================================
+
+# Core Dashboard Framework
+dash>=2.14.0
+dash-bootstrap-components>=1.5.0
+dash-auth>=2.0.0
+
+# Data Processing (compatible Python 3.13 with pre-built wheels)
+pandas>=2.2.0
+numpy>=1.26.0
+
+# Visualization
+plotly>=5.18.0
+kaleido>=0.2.1  # For static image export
+
+# Performance Metrics (compatible Python 3.13)
+scipy>=1.12.0
+scikit-learn>=1.4.0
+
+# File Handling
+openpyxl>=3.1.0  # Excel export
+reportlab>=4.0.0  # PDF export
+
+# Database (for production)
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL support
+
+# Authentication & Security
+flask-login>=0.6.0
+bcrypt>=4.1.0
+python-dotenv>=1.0.0
+
+# Deployment
+gunicorn>=21.2.0  # Production server
+whitenoise>=6.6.0  # Static files serving
+
+# Development Tools (optional - comment out if issues)
+# black>=23.12.0
+# pylint>=3.0.0
+# pytest>=7.4.0
