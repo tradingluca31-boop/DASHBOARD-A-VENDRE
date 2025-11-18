@@ -64,21 +64,31 @@ class DataLoader:
             return None
 
     def _parse_zip(self, data: bytes) -> Optional[List[Dict]]:
-        """Parse ZIP file and extract training_stats.json."""
+        """Parse ZIP file and extract JSON data (training_stats.json or any .json file)."""
         try:
             zip_bytes = io.BytesIO(data)
 
             with zipfile.ZipFile(zip_bytes, "r") as zip_ref:
-                # Find training_stats.json
+                # First, try to find training_stats.json (preferred)
                 stats_files = [
                     f for f in zip_ref.namelist() if "training_stats.json" in f.lower()
                 ]
 
+                # If not found, accept ANY .json file
                 if not stats_files:
-                    raise ValueError("No training_stats.json found in ZIP")
+                    stats_files = [
+                        f for f in zip_ref.namelist() if f.lower().endswith(".json")
+                    ]
+
+                if not stats_files:
+                    raise ValueError("No JSON file found in ZIP. Please include a .json file with checkpoint data.")
+
+                # If multiple JSON files, use the first one
+                json_file_name = stats_files[0]
+                print(f"Loading JSON file from ZIP: {json_file_name}")
 
                 # Extract and parse
-                with zip_ref.open(stats_files[0]) as json_file:
+                with zip_ref.open(json_file_name) as json_file:
                     data = json.load(json_file)
 
                     if not isinstance(data, list):
